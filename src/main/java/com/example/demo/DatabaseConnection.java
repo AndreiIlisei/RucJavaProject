@@ -12,7 +12,7 @@ public class DatabaseConnection {
         String url = "jdbc:postgresql://localhost:5432/PFSExam?currentSchema=PFSExam";
         Properties prop = new Properties();
         prop.setProperty("user", "postgres");
-        prop.setProperty("password", "Secret");
+        prop.setProperty("password", Global.ACCOUNT_SID);
 
         try {
             Class.forName("org.postgresql.Driver");

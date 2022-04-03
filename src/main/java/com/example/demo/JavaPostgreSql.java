@@ -15,7 +15,7 @@ public class JavaPostgreSql {
         String url = "jdbc:postgresql://localhost:5432/PFSExam?currentSchema=PFSExam";
         Properties prop = new Properties();
         prop.setProperty("user", "postgres");
-        prop.setProperty("password", "Gie2761!");
+        prop.setProperty("password", Global.ACCOUNT_SID);
 
         String username = userName;
         String useremail = userEmail;
@@ -23,7 +23,7 @@ public class JavaPostgreSql {
         DatabaseConnection dbCon = new DatabaseConnection();
         dbCon.DatabaseConnection();
         // query
-        String query = "INSERT INTO public.\"javafx\" (email, name, pass) VALUES(?, ?, ?)";
+        String query = "INSERT INTO public.\"WriteToDataBase\" (username, useremail, userpassword) VALUES(?, ?, ?)";
         try {
             Class.forName("org.postgresql.Driver");
             Connection con = DriverManager.getConnection(url, prop);
