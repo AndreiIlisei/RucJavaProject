@@ -6,10 +6,12 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 
+import java.io.IOException;
+
 public class SignUpController {
 
     @FXML
-    private Button create_acc_btn;
+    private Button btn_sign_up;
     @FXML
     private TextField create_name;
     @FXML
@@ -17,10 +19,15 @@ public class SignUpController {
     @FXML
     private PasswordField create_pass;
 
+
     public void getData(ActionEvent actionEvent) {
         System.out.println(create_name.getText());
         System.out.println(create_email.getText());
         System.out.println(create_pass.getText());
+
         JavaPostgreSql.writeToDatabase(create_name.getText(), create_email.getText(), create_pass.getText());
+
+
+
     }
 }
