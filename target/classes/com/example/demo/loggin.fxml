@@ -40,7 +40,7 @@
                   <Font name="Times New Roman" size="15.0" />
                </font>
             </Label>
-            <Button fx:id="btn_sign_up" alignment="TOP_CENTER" layoutX="429.0" layoutY="307.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" style="-fx-background-color: transparent;" text="Sign Up" textFill="WHITE" underline="true">
+            <Button fx:id="btn_sign_up" onAction="#createAccount" alignment="TOP_CENTER" layoutX="429.0" layoutY="307.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" style="-fx-background-color: transparent;" text="Sign Up" textFill="WHITE" underline="true">
                <font>
                   <Font name="Times New Roman Bold" size="16.0" />
                </font>
