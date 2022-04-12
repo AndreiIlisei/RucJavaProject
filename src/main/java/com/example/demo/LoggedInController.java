@@ -13,4 +13,9 @@ public class LoggedInController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
     }
+
+    public void setUserInfo(String userName, String email) {
+//        label_welcome.setText("welcome" + userName + "!");
+
+    }
 }

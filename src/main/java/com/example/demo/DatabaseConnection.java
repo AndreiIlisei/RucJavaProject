@@ -2,9 +2,7 @@ package com.example.demo;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Properties;
-;
 
 public class DatabaseConnection {
     public Connection DatabaseConnection() {
@@ -26,4 +24,5 @@ public class DatabaseConnection {
         }
         return null;
     }
+
 }
