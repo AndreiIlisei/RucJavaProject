@@ -24,7 +24,7 @@ public class Encryptor {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         SecretKeySpec key = new SecretKeySpec(secretKey,"AES");
         cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(IV));
-        byte[] cipherText = cipher.doFinal(String.valueOf(input).getBytes());
+        byte[] cipherText = cipher.doFinal(input.getBytes());
         return Base64.getEncoder()
                 .encodeToString(cipherText);
     }

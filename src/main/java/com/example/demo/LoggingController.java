@@ -31,6 +31,10 @@ public class LoggingController {
         JavaPostgreSql.loginUser(event, tf_username.getText(), tf_password.getText());
     }
 
+    public void loginPerson2(ActionEvent event) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, IOException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        JavaPostgreSql.loginHandler(event, tf_username.getText(), tf_password.getText());
+    }
+
 
     // Check Login Method
 //    private void checkLogin() throws IOException {

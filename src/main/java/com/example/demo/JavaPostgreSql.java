@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 
 import javax.crypto.BadPaddingException;
@@ -14,7 +15,9 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.util.HashMap;
 import java.util.Properties;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,6 +29,9 @@ public class JavaPostgreSql {
             12, 12, 12, 12, 12, 12, 12 };
 
     static File file = new File("data.txt");
+
+    static HashMap<String, String> loginInfo = new HashMap<>();
+    
 
     static void writeToFile(String userName, String userEmail, String userPassword) throws IOException, NoSuchPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
@@ -65,6 +71,30 @@ public class JavaPostgreSql {
             lgr.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
+    // Login from the file data
+    @FXML
+    static void loginHandler(ActionEvent event, String userName, String userPassword) throws IOException, NoSuchPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+        updateUsernamesAndPasswords();
+
+        String encryptedPassword = loginInfo.get(userName);
+        if(userPassword.equals(encryptor.decrypt(encryptedPassword,encryptionKey))){
+            System.out.println("successfully login!");
+        } else {
+            System.out.println("successfully not login!");
+        }
+    }
+
+    private static void updateUsernamesAndPasswords() throws IOException {
+        Scanner scanner = new Scanner(file);
+        loginInfo.clear();
+        loginInfo = new HashMap<>();
+        while (scanner.hasNext()){
+            String[] splitInfo = scanner.nextLine().split(",");
+            loginInfo.put(splitInfo[0],splitInfo[1]);
+        }
+    }
+
 
     // Login into my sql Database
     public static void loginUser(ActionEvent event, String userName, String userPassword) throws IOException, NoSuchPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {

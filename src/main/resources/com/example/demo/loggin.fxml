@@ -41,6 +41,15 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+            <Button fx:id="btn_login2" layoutX="360.0" layoutY="360.0" mnemonicParsing="false" onAction="#loginPerson2" prefHeight="26.0" prefWidth="99.0" text="Login with file">
+               <font>
+                  <Font name="Times New Roman" size="17.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+
             <Label layoutX="341.0" layoutY="307.0" prefHeight="29.0" prefWidth="99.0" text="Not a member?" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Times New Roman" size="15.0" />
