@@ -1,33 +1,65 @@
 package com.example.demo;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
+import org.bouncycastle.util.Arrays;
 
-import javax.crypto.*;
+import javax.crypto.Cipher;
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.*;
-import java.util.Arrays;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
+import java.security.Security;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.util.Base64;
-
 public class Encryptor {
-    private static SecretKey entranceKey;
+
 
     //Advanced Encryption Standard
     //128 bit
     byte[] IV = {0x01, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
     private static byte[] iv;
     private static SecretKey key;
+    private static SecretKey macKey;
+    private static SecretKey entranceKey;
+    //entranceKey = generateKey(master_passwd, encSalt);
+
+    private static byte[] macSalt;
+
     private static final int keyLength = 32;
     private static final SecureRandom random = new SecureRandom();
     static String dir = "C:\\Users\\Steffen Giessing\\Desktop\\PFSExam\\RucJavaProject\\src\\main\\java\\com\\encryption";
-    static String fileName = dir + "passwordFile.txt";
+    static String fileName = dir + "\\passfile.txt";
+
+    public static SecretKey generateKey(String password, byte[] salt) throws
+            FileNotFoundException,
+            IOException,
+            NoSuchProviderException,
+            InvalidKeySpecException,
+            NoSuchAlgorithmException {
+        Security.addProvider(new BouncyCastleProvider());
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256", "BC");
+
+        //generate key
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+        SecretKey tmpKey = factory.generateSecret(spec);
+        SecretKey key = new SecretKeySpec(tmpKey.getEncoded(), "AES");
+        return key;
+    }
 //    public String encrypt(String input, byte[] secretKey) throws NoSuchPaddingException, NoSuchAlgorithmException,
 //            InvalidAlgorithmParameterException, InvalidKeyException,
 //            BadPaddingException, IllegalBlockSizeException {
@@ -74,22 +106,24 @@ public class Encryptor {
         return keySpec;
     }
 
-    public static byte[] encrypt(String file) throws Exception {
+    public static byte[] encrypt(String file, SecretKey entranceKey) throws Exception {
         byte[] IV = {0x01, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
         key = generateKey();
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5padding", "BC");
         SecureRandom csprng = new SecureRandom();
-        byte[] randomBytes = new byte[16];
+        byte[] randomBytes = new byte[cipher.getBlockSize()];
         csprng.nextBytes(randomBytes);
-        String ivstr = Arrays.toString(randomBytes);
-        iv = ivstr.getBytes(Charset.defaultCharset());
+        //String ivstr = Arrays.toString(randomBytes);
+        //iv = ivstr.getBytes(Charset.defaultCharset());
+        IvParameterSpec ivParam = new IvParameterSpec(iv);
 
-        cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(IV));
-
+        cipher.init(Cipher.ENCRYPT_MODE, key, ivParam);
+        byte[] encrypted = cipher.doFinal(file.getBytes());
+        byte[] iv_encrypted = Arrays.concatenate(randomBytes, encrypted);
         System.out.println(Base64.getEncoder().withoutPadding().encodeToString(key.getEncoded()));
         printByteArr(iv);
 
-        return cipher.doFinal(file.getBytes());
+        return iv_encrypted;
     }
 
     private static void printByteArr(byte[] arr) {
@@ -100,25 +134,75 @@ public class Encryptor {
         System.out.println("]");
     }
 
-    public static String  /*byte[]*/ decrypt(byte[] cipherText /*, SecretKey key*/) throws Exception {
+    public static byte[] decrypt(byte[] cipherText, SecretKey key) throws Exception {
+
         byte[] IV = {0x01, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
         printByteArr(cipherText);
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5padding", "BC");
-        cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(IV));
 
+        byte[] iv = new byte[cipher.getBlockSize()];
+        iv = Arrays.copyOf(cipherText, iv.length);
+        IvParameterSpec ivParam = new IvParameterSpec(iv);
 
-       // byte[] decrypted = cipher.doFinal(cipherText);
-     //   return decrypted;
-        return new String(cipher.doFinal(cipherText));
+        byte[] encrypted = Arrays.copyOfRange(cipherText, iv.length, cipherText.length);
+
+        cipher.init(Cipher.DECRYPT_MODE, key, ivParam);
+        byte[] decrypted = cipher.doFinal(encrypted);
+        return decrypted;
 
     }
-    public void createAccount () throws Exception {
-        Path path = Paths.get(fileName);
+    public static void createAccount(String password) throws Exception {
+        String username = "test username";
+        String useremail = "test@email.test";
+
+        String passwd = "\\dir";
+        String getpath = System.getProperty("passfile.txt");
+        File file = new File("passfile.txt");
+        Path path = Paths.get("C:\\Users\\Steffen Giessing\\Desktop\\PFSExam\\RucJavaProject\\src\\main\\java\\com\\example\\demo\\passfile.txt");
         byte[] data = Files.readAllBytes(path);
-
         byte[] encryptedData = Arrays.copyOfRange(data, 320, data.length);
-        //byte[] decrypt = decrypt(encryptedData, entranceKey);
+        byte[] decrypt = decrypt(encryptedData, entranceKey);
 
+        if(accountHandler(username, useremail, decrypt) == null) {
+
+            byte[] encrypted = encrypt(password, entranceKey);
+
+            byte[] hmac = hmac(encrypted, macKey);
+            byte[] salt_mac_encrypt = Arrays.concatenate(macSalt, hmac, encrypted);
+
+            try(FileOutputStream output = new FileOutputStream("passwordFile")){
+                output.write(salt_mac_encrypt);
+                output.close();
+                System.out.println("Registered");
+            }
+        } else {
+            System.out.println("Already registered");
+        }
+    }
+    private static String accountHandler(String username, String useremail, byte[] decrypted) throws Exception{
+        String dataString = new String(decrypted, "UTF-8");
+        String[] accounts = dataString.split("!");
+        String id = username + " " + useremail;
+
+        for (String account : accounts){
+            if(account.contains(id)){
+                return account;
+            }
+        }
+
+        return null;
+    }
+
+
+    public static byte[] hmac(byte[] input,SecretKey key) throws Exception{
+
+        Security.addProvider(new BouncyCastleProvider());
+
+        Mac mac = Mac.getInstance("HmacSHA512", "BC");
+
+        mac.init(key);
+
+        return mac.doFinal(input);
     }
 
 
@@ -128,10 +212,10 @@ public class Encryptor {
 
         Security.addProvider(new BouncyCastleProvider());
         byte[] keybytes = Hex.decode("000102030405060708090a0b0c0d0e0f");
-
-        byte[] cipherText = encrypt(fileName);
-        String getText = decrypt(cipherText);
-        System.out.println(getText);
+        createAccount("test");
+      //  byte[] cipherText = encrypt(fileName);
+        //String getText = decrypt(cipherText);
+     //   System.out.println(getText);
         //128 bit
 //        byte[] encryptionKey = {65, 12, 12, 12, 12, 12, 12, 12, 12,
 //                12, 12, 12, 12, 12, 12, 12 };
