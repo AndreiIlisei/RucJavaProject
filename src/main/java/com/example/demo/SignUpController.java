@@ -32,7 +32,7 @@ public class SignUpController {
     byte[] encryptionKey = {65, 12, 12, 12, 12, 12, 12, 12, 12,
             12, 12, 12, 12, 12, 12, 12 };
 
-    String encryptedPass = encryptor.encrypt(String.valueOf(create_pass), encryptionKey);
+  //  String encryptedPass = encryptor.encrypt(String.valueOf(create_pass), encryptionKey);
 
     public SignUpController() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
     }
@@ -55,7 +55,7 @@ public class SignUpController {
         System.out.println(create_email.getText());
         System.out.println(create_pass.getText());
 
-        JavaPostgreSql.writeToDatabase(create_name.getText(), create_email.getText(), String.valueOf(encryptedPass.getBytes()));
+   //     JavaPostgreSql.writeToDatabase(create_name.getText(), create_email.getText(), String.valueOf(encryptedPass.getBytes()));
     }
 
     public void getData2(ActionEvent actionEvent) throws IOException , NoSuchPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
@@ -63,7 +63,7 @@ public class SignUpController {
         System.out.println(create_email.getText());
         System.out.println(create_pass.getText());
 
-        JavaPostgreSql.writeToFile(create_name.getText(), create_email.getText(), String.valueOf(encryptedPass.getBytes()));
+       // JavaPostgreSql.writeToFile(create_name.getText(), create_email.getText(), String.valueOf(encryptedPass.getBytes()));
     }
 
 

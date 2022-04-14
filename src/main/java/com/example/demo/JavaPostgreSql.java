@@ -36,7 +36,7 @@ public class JavaPostgreSql {
     static void writeToFile(String userName, String userEmail, String userPassword) throws IOException, NoSuchPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
 
-        writer.write(userName + "," + encryptor.encrypt(userPassword,encryptionKey) + "\n");
+       // writer.write(userName + "," + encryptor.encrypt(userPassword,encryptionKey) + "\n");
         writer.close();
     }
 
@@ -77,12 +77,12 @@ public class JavaPostgreSql {
     static void loginHandler(ActionEvent event, String userName, String userPassword) throws IOException, NoSuchPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
         updateUsernamesAndPasswords();
 
-        String encryptedPassword = loginInfo.get(userName);
-        if(userPassword.equals(encryptor.decrypt(encryptedPassword,encryptionKey))){
-            System.out.println("successfully login!");
-        } else {
-            System.out.println("successfully not login!");
-        }
+//        String encryptedPassword = loginInfo.get(userName);
+//        if(userPassword.equals(encryptor.decrypt(encryptedPassword,encryptionKey))){
+//            System.out.println("successfully login!");
+//        } else {
+//            System.out.println("successfully not login!");
+//        }
     }
 
     private static void updateUsernamesAndPasswords() throws IOException {
@@ -117,32 +117,32 @@ public class JavaPostgreSql {
             } else {
                 while (resultSet.next()) {
                     String retrievedPassword = resultSet.getString("userpassword");
-                    if (retrievedPassword.equals(encryptor.decrypt(userPassword, encryptionKey))) {
-                        m.changeScene("loggedIn.fxml");
-                    } else {
-                        System.out.println("Password did not match!");
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setContentText("Wrong credentials");
-                        alert.show();
-                    }
+//                    if (retrievedPassword.equals(encryptor.decrypt(userPassword, encryptionKey))) {
+//                        m.changeScene("loggedIn.fxml");
+//                    } else {
+//                        System.out.println("Password did not match!");
+//                        Alert alert = new Alert(Alert.AlertType.ERROR);
+//                        alert.setContentText("Wrong credentials");
+//                        alert.show();
+//                    }
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (InvalidAlgorithmParameterException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchPaddingException e) {
+//            e.printStackTrace();
+//        } catch (IllegalBlockSizeException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        } catch (BadPaddingException e) {
+//            e.printStackTrace();
+//        } catch (InvalidKeyException e) {
+//            e.printStackTrace();
         } finally {
             if (resultSet != null) {
                 try {
