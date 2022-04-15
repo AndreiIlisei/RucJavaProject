@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
 import org.bouncycastle.util.Arrays;
@@ -12,7 +11,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -44,6 +42,7 @@ public class Encryptor {
     private static final SecureRandom random = new SecureRandom();
     static String dir = "C:\\Users\\Steffen Giessing\\Desktop\\PFSExam\\RucJavaProject\\src\\main\\java\\com\\encryption";
     static String fileName = dir + "\\passfile.txt";
+    private static byte[] entranceSalt;
 
     public static SecretKey generateKey(String password, byte[] salt) throws
             FileNotFoundException,
@@ -60,45 +59,7 @@ public class Encryptor {
         SecretKey key = new SecretKeySpec(tmpKey.getEncoded(), "AES");
         return key;
     }
-//    public String encrypt(String input, byte[] secretKey) throws NoSuchPaddingException, NoSuchAlgorithmException,
-//            InvalidAlgorithmParameterException, InvalidKeyException,
-//            BadPaddingException, IllegalBlockSizeException {
-//
-//        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-//        SecretKeySpec key = new SecretKeySpec(secretKey, "AES");
-//        cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(IV));
-//        byte[] cipherText = cipher.doFinal(input.getBytes());
-//        return Base64.getEncoder()
-//                .encodeToString(cipherText);
-//    }
-//
-//
-//    public String decrypt(String cipherText, byte[] secretKey) throws NoSuchPaddingException, NoSuchAlgorithmException,
-//            InvalidAlgorithmParameterException, InvalidKeyException,
-//            BadPaddingException, IllegalBlockSizeException {
-//
-//        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-//        SecretKeySpec key = new SecretKeySpec(secretKey, "AES");
-//        cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(IV));
-//        byte[] plainText = cipher.doFinal(Base64.getDecoder()
-//                .decode(cipherText));
-//        return new String(plainText);
-//    }
-//    private static IvParameterSpec generateIV(Cipher cipher) throws Exception {
-//        byte [] ivBytes = new byte[cipher.getBlockSize()];
-//        random.nextBytes(ivBytes);
-//        return new IvParameterSpec(ivBytes);
-//    }
 
-//    public byte[] stringToByteArray(String keyString) {
-//        String[] keyFragments = keyString.split(" ");
-//
-//        byte[] key = new byte[16];
-//        for (int i = 0; i < keyFragments.length; i++) {
-//            key[i] = Byte.parseByte(keyFragments[i]);
-//        }
-//        return key;
-//    }
     private static SecretKey generateKey() throws Exception {
         byte[] keyBytes = new byte[keyLength];
         random.nextBytes(keyBytes);
@@ -136,9 +97,8 @@ public class Encryptor {
 
     public static byte[] decrypt(byte[] cipherText, SecretKey key) throws Exception {
 
-        byte[] IV = {0x01, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
         printByteArr(cipherText);
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5padding", "BC");
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 
         byte[] iv = new byte[cipher.getBlockSize()];
         iv = Arrays.copyOf(cipherText, iv.length);
@@ -155,10 +115,7 @@ public class Encryptor {
         String username = "test username";
         String useremail = "test@email.test";
 
-        String passwd = "\\dir";
-        String getpath = System.getProperty("passfile.txt");
-        File file = new File("passfile.txt");
-        Path path = Paths.get("C:\\Users\\Steffen Giessing\\Desktop\\PFSExam\\RucJavaProject\\src\\main\\java\\com\\example\\demo\\passfile.txt");
+        Path path = Paths.get("C:\\Users\\Steffen Giessing\\Desktop\\PFSExam\\RucJavaProject\\src\\main\\java\\com\\example\\demo\\dir\\passfile.txt");
         byte[] data = Files.readAllBytes(path);
         byte[] encryptedData = Arrays.copyOfRange(data, 320, data.length);
         byte[] decrypt = decrypt(encryptedData, entranceKey);
@@ -212,6 +169,19 @@ public class Encryptor {
 
         Security.addProvider(new BouncyCastleProvider());
         byte[] keybytes = Hex.decode("000102030405060708090a0b0c0d0e0f");
+
+        String master_password = "masterPassword";
+        Path path = Paths.get("C:\\Users\\Steffen Giessing\\Desktop\\PFSExam\\RucJavaProject\\src\\main\\java\\com\\example\\demo\\dir\\masterfile.txt");
+        byte[] master_pass = Files.readAllBytes(path);
+
+        entranceSalt = Arrays.copyOf(master_pass, 256);
+
+        entranceKey = generateKey(master_password, entranceSalt);
+
+
+
+
+
         createAccount("test");
       //  byte[] cipherText = encrypt(fileName);
         //String getText = decrypt(cipherText);
