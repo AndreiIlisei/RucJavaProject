@@ -18,25 +18,23 @@
 <!--</CheckBox>-->
 <!--</StackPane>-->
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.SignUpController">
-   <children>
-<!--      <PasswordField fx:id="create_pass" layoutX="165.0" layoutY="200.0" visible="false" />-->
-<!--      <PasswordField fx:id="hiddenPasswordTextField"  />-->
-      <TextField fx:id="create_email" layoutX="165.0" layoutY="156.0" />
-      <TextField fx:id="create_name" layoutX="165.0" layoutY="114.0" />
-      <Button fx:id="create_acc_btn" layoutX="165.0" layoutY="243.0" mnemonicParsing="false" onAction="#getData" text="Create Account" />
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.demo.SignUpController">
+      <children>
+            <PasswordField fx:id="create_pass" layoutX="165.0" layoutY="200.0" />
+            <TextField fx:id="create_email" layoutX="165.0" layoutY="156.0"/>
+            <TextField fx:id="create_name" layoutX="165.0" layoutY="114.0"/>
+            <Button fx:id="create_acc_btn" layoutX="165.0" layoutY="243.0" mnemonicParsing="false" onAction="#getData2"
+                    text="Create Account"/>
 
-         <Button fx:id="create_acc_btn2" layoutX="300.0" layoutY="243.0" mnemonicParsing="false" onAction="#getData2" text="Create Account" />
-      <Button fx:id="go_back" layoutX="273.0" layoutY="243.0" mnemonicParsing="false" onAction="#goBackToLogin" text="Back" />
-      <Label layoutX="97.0" layoutY="118.0" prefHeight="17.0" prefWidth="62.0" text="User Name" />
-      <Label layoutX="97.0" layoutY="160.0" prefHeight="17.0" prefWidth="62.0" text="User Email" />
-      <Label layoutX="97.0" layoutY="204.0" prefHeight="17.0" prefWidth="52.0" text="Password" />
-      <Button layoutX="388.0" layoutY="102.0" mnemonicParsing="false" text="Generate Random Password" />
+            <Button fx:id="create_acc_btn2" layoutX="300.0" layoutY="243.0" mnemonicParsing="false" onAction="#getData2"
+                    text="Create Account"/>
+            <Button fx:id="go_back" layoutX="273.0" layoutY="243.0" mnemonicParsing="false" onAction="#goBackToLogin"
+                    text="Back"/>
+            <Label layoutX="97.0" layoutY="118.0" prefHeight="17.0" prefWidth="62.0" text="User Name"/>
+            <Label layoutX="97.0" layoutY="160.0" prefHeight="17.0" prefWidth="62.0" text="User Email"/>
+            <Label layoutX="97.0" layoutY="204.0" prefHeight="17.0" prefWidth="52.0" text="Password"/>
+            <Button layoutX="388.0" layoutY="102.0" mnemonicParsing="false" text="Generate Random Password"/>
 
-      <StackPane alignment="BASELINE_RIGHT" depthTest="DISABLE" layoutX="165.0" layoutY="200.0">
-      <PasswordField fx:id="create_pass" prefHeight="25.0" prefWidth="143.0" />
-      <TextField fx:id="passwordTextField" visible="false" />
-      <CheckBox fx:id="showPassword" alignment="BOTTOM_LEFT" cacheShape="false" centerShape="false" mnemonicParsing="false" onAction="#changeVisibility" prefHeight="17.0" prefWidth="21.0" scaleShape="false" />
-      </StackPane>
-   </children>
+      </children>
 </AnchorPane>

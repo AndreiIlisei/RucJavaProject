@@ -33,14 +33,6 @@
                </font>
             </Label>
             <TextField fx:id="tf_username" layoutX="333.0" layoutY="145.0" />
-            <Button fx:id="btn_login" layoutX="360.0" layoutY="260.0" mnemonicParsing="false" onAction="#loginPerson" prefHeight="26.0" prefWidth="99.0" text="Login">
-               <font>
-                  <Font name="Times New Roman" size="17.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
             <Button fx:id="btn_login2" layoutX="360.0" layoutY="360.0" mnemonicParsing="false" onAction="#loginPerson2" prefHeight="26.0" prefWidth="99.0" text="Login with file">
                <font>
                   <Font name="Times New Roman" size="17.0" />
@@ -64,15 +56,6 @@
                </cursor>
             </Button>
             <PasswordField fx:id="tf_password" layoutX="333.0" layoutY="212.0" />
-<!--            <Button fx:id="btn_selector" layoutX="251.0" layoutY="260.0" mnemonicParsing="false" onAction="#createAccount" prefHeight="26.0" prefWidth="99.0" text="Open File">-->
-<!--               <font>-->
-<!--                  <Font name="Times New Roman" size="17.0" />-->
-<!--               </font>-->
-<!--               <cursor>-->
-<!--                  <Cursor fx:constant="HAND" />-->
-<!--               </cursor>-->
-<!--            </Button>-->
-<!--            <ListView fx:id="listview" layoutX="51.0" layoutY="33.0" prefHeight="200.0" prefWidth="200.0" />-->
          </children>
       </AnchorPane>
 
