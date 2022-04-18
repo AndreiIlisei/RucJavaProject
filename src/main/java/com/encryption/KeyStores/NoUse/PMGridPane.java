@@ -159,9 +159,11 @@ class LoadButton extends Button {
         setOnAction(e -> {
             PMGridPane pm = (PMGridPane) getParent();
             pm.load();
+            TextField t = (TextField) pm.getNode(0, 2);
+            System.out.println(t.getText());
         });
     }
-} // LoadButton
+}
 
 class StoreButton extends Button {
     StoreButton() {
@@ -169,6 +171,8 @@ class StoreButton extends Button {
         setOnAction(e -> {
             PMGridPane pm = (PMGridPane) getParent();
             pm.store();
+            TextField t = (TextField) pm.getNode(0, 2);
+            System.out.println(t.getText());
         });
     }
 } // StoreButton
@@ -177,4 +181,4 @@ class MasterPasswordField extends PasswordField {
     MasterPasswordField() {
         setBackground(new Background(new BackgroundFill(Color.RED, new CornerRadii(5), null)));
     }
-} // MasterPasswordField
+} // MasterPasswordFiel

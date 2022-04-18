@@ -1,7 +1,6 @@
 package com.example.demo;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.util.encoders.Hex;
 import org.bouncycastle.util.Arrays;
 
 import javax.crypto.Cipher;
@@ -40,7 +39,7 @@ public class Encryptor {
 
     private static final int keyLength = 32;
     private static final SecureRandom random = new SecureRandom();
-    static String dir = "C:\\Users\\Steffen Giessing\\Desktop\\PFSExam\\RucJavaProject\\src\\main\\java\\com\\encryption";
+    static String dir = "D:\\RUC";
     static String fileName = dir + "\\passfile.txt";
     private static byte[] entranceSalt;
 
@@ -115,7 +114,7 @@ public class Encryptor {
         String username = "test username";
         String useremail = "test@email.test";
 
-        Path path = Paths.get("C:\\Users\\Steffen Giessing\\Desktop\\PFSExam\\RucJavaProject\\src\\main\\java\\com\\example\\demo\\dir\\passfile.txt");
+        Path path = Paths.get("user.dir\\passfile.txt");
         byte[] data = Files.readAllBytes(path);
         byte[] encryptedData = Arrays.copyOfRange(data, 320, data.length);
         byte[] decrypt = decrypt(encryptedData, entranceKey);
@@ -164,14 +163,10 @@ public class Encryptor {
 
 
     public static void main(String[] args) throws Exception {
-        //Encryptor encryptor = new Encryptor();
-
-
         Security.addProvider(new BouncyCastleProvider());
-        byte[] keybytes = Hex.decode("000102030405060708090a0b0c0d0e0f");
 
         String master_password = "masterPassword";
-        Path path = Paths.get("C:\\Users\\Steffen Giessing\\Desktop\\PFSExam\\RucJavaProject\\src\\main\\java\\com\\example\\demo\\dir\\masterfile.txt");
+        Path path = Paths.get("user.dir\\masterfile.txt");
         byte[] master_pass = Files.readAllBytes(path);
 
         entranceSalt = Arrays.copyOf(master_pass, 256);
@@ -179,27 +174,6 @@ public class Encryptor {
         entranceKey = generateKey(master_password, entranceSalt);
 
 
-
-
-
         createAccount("test");
-      //  byte[] cipherText = encrypt(fileName);
-        //String getText = decrypt(cipherText);
-     //   System.out.println(getText);
-        //128 bit
-//        byte[] encryptionKey = {65, 12, 12, 12, 12, 12, 12, 12, 12,
-//                12, 12, 12, 12, 12, 12, 12 };
-//
-//        String stringKey = "65 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12";
-//
-//
-//        byte[] key = encryptor.stringToByteArray(stringKey);
-//
-//        String input = "Secret";
-//
-//        System.out.println(encryptor.encrypt(input,key));
-//        //output: VyEcl0pLeqQLemGONcik0w==
-//
-//        System.out.println(encryptor.decrypt("VyEcl0pLeqQLemGONcik0w==",key));
     }
 }
