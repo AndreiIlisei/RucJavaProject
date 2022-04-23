@@ -49,7 +49,7 @@ public class Encryptor {
         Path path = Paths.get(master_passwd_path);
 
         byte[] data = Files.readAllBytes(path);
-        byte[] encryptedData = Arrays.copyOfRange(data, 0, data.length);
+        byte[] encryptedData = Arrays.copyOfRange(data, 320, data.length);
         byte[] decrypt = decrypt(encryptedData, entranceKey);
 
         if (accountHandler(username, useremail, decrypt) == null) {
@@ -113,20 +113,22 @@ public class Encryptor {
         Path path = Paths.get(pass_file);
         byte[] data = Files.readAllBytes(path);
 
-        byte[] encrypted = Arrays.copyOfRange(data, 0, data.length);
+        byte[] encrypted = Arrays.copyOfRange(data, 320, data.length);
         byte[] decrypted = decrypt(encrypted, entranceKey);
 
         String datastring = new String(decrypted, StandardCharsets.UTF_8);
-        String[] acc = datastring.split("!");
-        String id = username;
-        for (String accounts : acc) {
-            //  if (accounts.contains(id)) {
-            String[] accArrray = accounts.split(" ");
-            System.out.println("Username: " + accArrray[0]);
-//            }else {
-//                System.out.println("no account found");
-//            }
-        }
+        System.out.println(datastring);
+//        String[] acc = datastring.split("!");
+//        String id = username;
+//        for (String accounts : acc) {
+//            //  if (accounts.contains(id)) {
+//            String[] accArrray = accounts.split(" ");
+//
+//            System.out.println("Username: " + accArrray[0] + " " + accArrray[1]);
+////            }else {
+////                System.out.println("no account found");
+////            }
+//        }
     }
 
     private static boolean fileCheck() {

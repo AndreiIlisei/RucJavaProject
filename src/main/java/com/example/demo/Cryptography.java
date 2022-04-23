@@ -24,7 +24,8 @@ public class Cryptography {
         byte[] encrypted = Arrays.copyOfRange(input, iv.length, input.length);
 
         cipher.init(Cipher.DECRYPT_MODE, key, ivParam);
-        return cipher.doFinal(encrypted);
+        byte[] decrypt = cipher.doFinal(encrypted);
+        return decrypt;
 
     }
 
