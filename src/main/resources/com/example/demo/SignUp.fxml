@@ -1,0 +1,13 @@
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.demo.NewKeyStore">
+    <children>
+        <StackPane alignment="BASELINE_RIGHT" depthTest="DISABLE" layoutX="165.0" layoutY="200.0">
+            <PasswordField fx:id="create_pass" prefHeight="25.0" prefWidth="143.0" />
+        </StackPane>
+    </children>
+</AnchorPane>
