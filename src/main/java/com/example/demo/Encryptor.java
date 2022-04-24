@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.concurrent.TimeUnit;
 
 import static com.example.demo.Cryptography.decrypt;
 import static com.example.demo.Cryptography.encrypt;
@@ -20,41 +21,129 @@ import static com.example.demo.CryptographyHelper.*;
 
 public class Encryptor {
 
-    private static SecretKey key;
     private static SecretKey macKey;
     private static SecretKey entranceKey;
     private static byte[] macSalt;
     private static byte[] entranceSalt;
     static String pass_file_path = "/passwordfile.aes";
-    static String master_file_path ="/masterfile.aes";
+    static String master_file_path = "/masterfile.aes";
     static String pass_file_writer = "passwordfile.aes";
     static String master_file_writer = "masterfile.aes";
-    static Cryptography cryptography = new Cryptography();
 
-    private static void printByteArr(byte[] arr) {
-        System.out.print("[");
-        for (int i = 0; i < arr.length; i++) {
-            System.out.printf(i == 0 ? "%d" : ",%d", (arr[i] & 0xFF));
+    private static void deleteAccount(String domain, String username) throws Exception{
+        //get data from passwd_file
+        String pass_file = System.getProperty("user.dir");
+        pass_file += pass_file_path;
+        Path path = Paths.get(pass_file);
+        byte[] data = Files.readAllBytes(path);
+
+        //strip hmac and salt
+        byte[] encrypted_data = Arrays.copyOfRange(data, 320, data.length);
+        byte[] decrypted = decrypt(encrypted_data, entranceKey);
+
+        //check if account exists
+        if (accountHandler(domain, username, decrypted) != null) {
+            String dataString = new String(decrypted, StandardCharsets.UTF_8);
+            String[] accounts = dataString.split("!");
+            String account = domain + " " + username;
+            //search through accounts and delete account
+            for (int i = 0; i < accounts.length; i++) {
+                if (accounts[i].contains(account)) {
+                    accounts[i] = null;
+                    break;
+                }
+            }
+
+            //rebuild list of accounts by filling the removed
+            String newAccList = "";
+            for (int i = 0; i < accounts.length; i++) {
+                if (accounts[i] != null) {
+                    newAccList += accounts[i] + "!";
+                }
+            }
+
+            //turn accounts list back into bytes
+            byte[] bytesData = newAccList.getBytes(StandardCharsets.UTF_8);
+
+            //encrypt data
+            byte[] encrypted = encrypt(bytesData, entranceKey);
+
+            //generate salt, hmac, and append data
+            byte[] hmac = hmac(encrypted, macKey);
+            byte[] salt_hmac_and_encrypted = Arrays.concatenate(macSalt, hmac, encrypted);
+
+            //write to file
+            try (FileOutputStream output = new FileOutputStream(pass_file_writer)) {
+                output.write(salt_hmac_and_encrypted);
+                output.close();
+                System.out.println("USER ACCOUNT REMOVED!\n");
+            }
+        } else {//account not found
+            System.out.println("USER ACCOUNT DOES NOT EXIST!\n");
         }
-        System.out.println("]");
     }
 
-    public static void createAccount(String password) throws Exception {
-        String username = "test username";
-        String useremail = "test@email.test";
-        byte[] placeholder = {};
+    private static void changeAccount(String domain, String username, String password) throws Exception {
 
-        String master_passwd_path = System.getProperty("user.dir");
-        master_passwd_path += pass_file_path;
-        Path path = Paths.get(master_passwd_path);
+        String pass_file = System.getProperty("user.dir");
+        pass_file += pass_file_path;
+        Path path = Paths.get(pass_file);
+        byte[] data = Files.readAllBytes(path);
+
+        //strip hmac
+        byte[] encrypted_data = Arrays.copyOfRange(data, 320, data.length);
+        byte[] decrypted = decrypt(encrypted_data, entranceKey);
+
+        //perform account change
+        if (accountHandler(domain, username, decrypted) != null) {
+            String dataString = new String(decrypted, StandardCharsets.UTF_8);
+            String[] accounts = dataString.split("!");
+            String account = domain + " " + username;
+            String updated = domain + " " + username + " " + password;
+            //search through accounts and delete account
+            for (int i = 0; i < accounts.length; i++) {
+                if (accounts[i].contains(account)) {
+                    accounts[i] = updated;
+                    break;
+                }
+            }
+            //rebuild list of accounts and change to byte[]
+            String newAccList = "";
+            for (String acc : accounts) {
+                newAccList += acc + "!";
+            }
+            byte[] bytesData = newAccList.getBytes(StandardCharsets.UTF_8);
+
+            //encrypt new data
+            byte[] encrypted = encrypt(bytesData, entranceKey);
+
+            //generate new hmac and append
+            byte[] hmac = hmac(encrypted, macKey);
+            byte[] salt_hmac_and_encrypted = Arrays.concatenate(macSalt, hmac, encrypted);
+
+            //write to file
+            try (FileOutputStream output = new FileOutputStream(pass_file_writer)) {
+                output.write(salt_hmac_and_encrypted);
+                output.close();
+                System.out.println("USER ACCOUNT UPDATED!\n");
+            }
+        } else {//account not found
+            System.out.println("USER ACCOUNT DOES NOT EXIST!\n");
+        }
+    }
+
+    public static void createAccount(String domain, String username, String password) throws Exception {
+        String pass_file = System.getProperty("user.dir");
+        pass_file += pass_file_path;
+        Path path = Paths.get(pass_file);
 
         byte[] data = Files.readAllBytes(path);
         byte[] encryptedData = Arrays.copyOfRange(data, 320, data.length);
         byte[] decrypt = decrypt(encryptedData, entranceKey);
 
-        if (accountHandler(username, useremail, decrypt) == null) {
+        if (accountHandler(domain, username, decrypt) == null) {
 
-            String account = username + " " + useremail + " " + password + "!";
+            String account = domain + " " + username + " " + password + "!";
             byte[] accountBytes = account.getBytes(StandardCharsets.UTF_8);
             byte[] encrypted = encrypt(accountBytes, entranceKey);
 
@@ -84,11 +173,7 @@ public class Encryptor {
         return null;
     }
 
-    private static boolean passwordCheck(String entry) throws
-            FileNotFoundException,
-            IOException,
-            NoSuchAlgorithmException,
-            NoSuchProviderException {
+    private static boolean passwordCheck(String password) throws Exception{
         //get contents
         String master_passwd_path = System.getProperty("user.dir");
         master_passwd_path += master_file_path;
@@ -97,17 +182,16 @@ public class Encryptor {
 
         //get salt and password as bytes for comparison
         byte[] salt = Arrays.copyOf(contents, 256);
-        byte[] password = entry.getBytes();
+        byte[] password_bytes = password.getBytes();
 
         //concatenate the salt and the password then hash it
-        byte[] salted_password = Arrays.concatenate(salt, password);
+        byte[] salted_password = Arrays.concatenate(salt, password_bytes);
         byte[] hashed = hash(salted_password);
 
         return (Arrays.areEqual(contents, Arrays.concatenate(salt, hashed)));
     }
 
-    private static void getPass() throws Exception {
-        String username = "test username";
+    private static void getPass(String domain) throws Exception {
         String pass_file = System.getProperty("user.dir");
         pass_file += pass_file_path;
         Path path = Paths.get(pass_file);
@@ -118,17 +202,16 @@ public class Encryptor {
 
         String datastring = new String(decrypted, StandardCharsets.UTF_8);
         System.out.println(datastring);
-//        String[] acc = datastring.split("!");
-//        String id = username;
-//        for (String accounts : acc) {
-//            //  if (accounts.contains(id)) {
-//            String[] accArrray = accounts.split(" ");
-//
-//            System.out.println("Username: " + accArrray[0] + " " + accArrray[1]);
-////            }else {
-////                System.out.println("no account found");
-////            }
-//        }
+        String[] acc = datastring.split("!");
+        String id = domain;
+        for (String accounts : acc) {
+            if (accounts.contains(id)) {
+                String[] accArrray = accounts.split(" ");
+                System.out.println("Username: " + accArrray[0] + " " + accArrray[1] + " " + accArrray[2]);
+            } else {
+                System.out.println("no account found");
+            }
+        }
     }
 
     private static boolean fileCheck() {
@@ -146,7 +229,7 @@ public class Encryptor {
         return (passwd_file.exists() && master_passwd.exists());
     }
 
-    public static void setup() throws Exception {
+    public static void setup(String master_passwd) throws Exception {
 
         String passwd_file_string = System.getProperty("user.dir");
         passwd_file_string += pass_file_path;
@@ -171,7 +254,7 @@ public class Encryptor {
         master_passwd_file.createNewFile();
 
         //get master password
-        String master_passwd = "DetHerErMasterPassword";
+        master_passwd = "DetHerErMasterPassword";
         byte[] password = master_passwd.getBytes();
 
         //get salts and combine with master password
@@ -207,7 +290,7 @@ public class Encryptor {
         }
     }
 
-    private static void startup() throws Exception {
+    private static void startup(String master_passwd) throws Exception {
 
         String passwd_file_string = System.getProperty("user.dir");
         passwd_file_string += pass_file_path;
@@ -219,7 +302,7 @@ public class Encryptor {
         Path mPath = Paths.get(master_passwd_string);
         byte[] master_passwd_data = Files.readAllBytes(mPath);
 
-        String master_passwd = "DetHerErMasterPassword";
+        master_passwd = "DetHerErMasterPassword";
 
         macSalt = Arrays.copyOf(passwd_file_data, 256);
         entranceSalt = Arrays.copyOf(master_passwd_data, 256);
@@ -232,6 +315,7 @@ public class Encryptor {
         byte[] currentHmac = hmac(encrypted, macKey);
 
         if (Arrays.areEqual(lastHmac, currentHmac)) {
+            System.out.println("INTEGRITY CHECK OF PASSWORD FILE SUCCESS");
         } else {
             System.out.println("INTEGRITY CHECK OF PASSWORD FILE FAILED\n");
         }
@@ -240,17 +324,43 @@ public class Encryptor {
     public static void main(String[] args) throws Exception {
 
         if (!fileCheck()) {
-            setup();
+            setup("DetHerErMasterPassword");
         } else {
             boolean diditpass = passwordCheck("DetHerErMasterPassword");
             if (!diditpass) {
                 System.out.println("false");
             } else {
                 System.out.println("true");
-                startup();
-                createAccount("stef");
+                startup("DetHerErMasterPassword");
+                createAccount("stef", "Steffen", "DetHerErMasterPassword");
             }
         }
-        getPass();
+        getPass("stef");
+
+        changeAccount("stef", "Steffen", "nytpassword");
+
+        getPass("stef");
+
+        deleteAccount("stef", "Steffen");
+
+        startup("randomMasterPassword");
+
+        createAccount("stef", "nyYsers", "asfasf");
+        getPass("stef");
+
+        createAccount("stefdondon", "Steffen", "randomMasterPassword");
+        getPass("stefdondon");
+
+        createAccount("stefdon", "nyteUSer", "asdasd");
+        getPass("stefdon");
+
+        TimeUnit.SECONDS.sleep(3);
+        getPass("stef");
+
+//        passwordCheck("randomMasterPassword");
+//
+//        getPass("stef");
+
+
     }
 }
