@@ -15,7 +15,7 @@ public class Cryptography {
 
         Security.addProvider(new BouncyCastleProvider());
 
-        Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding", "BC");
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 
         byte[] iv = new byte[cipher.getBlockSize()];
         iv = Arrays.copyOf(input, iv.length);
@@ -33,7 +33,7 @@ public class Cryptography {
     public static byte[] encrypt(byte[] input, SecretKey entranceKey) throws Exception {
         Security.addProvider(new BouncyCastleProvider());
 
-        Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding", "BC");
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 
         SecureRandom random = new SecureRandom();
         byte[] iv = new byte[cipher.getBlockSize()];
