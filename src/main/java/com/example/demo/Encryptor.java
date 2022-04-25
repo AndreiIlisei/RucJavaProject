@@ -2,8 +2,13 @@ package com.example.demo;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.bouncycastle.util.Arrays;
 
 import javax.crypto.SecretKey;
@@ -15,6 +20,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.example.demo.Cryptography.decrypt;
 import static com.example.demo.Cryptography.encrypt;
@@ -46,7 +53,18 @@ public class Encryptor {
         m.changeScene("sign-up.fxml");
     }
 
-
+    public void getAddInformation(javafx.scene.input.MouseEvent mouseEvent) {
+        try {
+            Parent parent = FXMLLoader.load(getClass().getResource("addInformation.fxml"));
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(Encryptor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     // Action buttons
     public void loginFromMasterPass(javafx.event.ActionEvent event) throws Exception{
