@@ -1,18 +1,19 @@
 package com.example.demo;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.PasswordField;
 import org.bouncycastle.util.Arrays;
 
-import java.nio.charset.StandardCharsets;
 import javax.crypto.SecretKey;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.util.concurrent.TimeUnit;
 
 import static com.example.demo.Cryptography.decrypt;
@@ -20,6 +21,10 @@ import static com.example.demo.Cryptography.encrypt;
 import static com.example.demo.CryptographyHelper.*;
 
 public class Encryptor {
+    @FXML
+    private PasswordField tf_password;
+    @FXML
+    private PasswordField create_pass;
 
     private static SecretKey macKey;
     private static SecretKey entranceKey;
@@ -30,6 +35,29 @@ public class Encryptor {
     static String pass_file_writer = "passwordfile.aes";
     static String master_file_writer = "masterfile.aes";
 
+    // Change of scenes
+    public void goBackToLogin(ActionEvent actionEvent) throws IOException {
+        Main m = new Main();
+        m.changeScene("loggin.fxml");
+    }
+
+    public void ChangeSceneToAccountCreation(ActionEvent actionEvent) throws IOException {
+        Main m = new Main();
+        m.changeScene("sign-up.fxml");
+    }
+
+
+
+    // Action buttons
+    public void loginFromMasterPass(javafx.event.ActionEvent event) throws Exception{
+        startup(tf_password.getText());
+    }
+
+    public void createMasterPassword(ActionEvent event) throws Exception {
+        setup(create_pass.getText());
+    }
+
+    // Functions
     private static void deleteAccount(String domain, String username) throws Exception{
         //get data from passwd_file
         String pass_file = System.getProperty("user.dir");
@@ -229,8 +257,9 @@ public class Encryptor {
         return (passwd_file.exists() && master_passwd.exists());
     }
 
-    public static void setup(String master_passwd) throws Exception {
 
+    public static void setup(String master_passwd) throws Exception {
+        Main m = new Main();
         String passwd_file_string = System.getProperty("user.dir");
         passwd_file_string += pass_file_path;
         //Used for master_passwd path
@@ -254,7 +283,7 @@ public class Encryptor {
         master_passwd_file.createNewFile();
 
         //get master password
-        master_passwd = "DetHerErMasterPassword";
+//        master_passwd = "DetHerErMasterPassword";
         byte[] password = master_passwd.getBytes();
 
         //get salts and combine with master password
@@ -287,10 +316,15 @@ public class Encryptor {
         try (FileOutputStream output = new FileOutputStream(pass_file_writer)) {
             output.write(salt_hmac_and_encrypted);
             output.close();
+            System.out.println("This worked");
+            m.changeScene("loggedIn.fxml");
+
         }
     }
 
+
     private static void startup(String master_passwd) throws Exception {
+        Main m = new Main();
 
         String passwd_file_string = System.getProperty("user.dir");
         passwd_file_string += pass_file_path;
@@ -301,8 +335,6 @@ public class Encryptor {
         master_passwd_string += master_file_path;
         Path mPath = Paths.get(master_passwd_string);
         byte[] master_passwd_data = Files.readAllBytes(mPath);
-
-        master_passwd = "DetHerErMasterPassword";
 
         macSalt = Arrays.copyOf(passwd_file_data, 256);
         entranceSalt = Arrays.copyOf(master_passwd_data, 256);
@@ -316,10 +348,17 @@ public class Encryptor {
 
         if (Arrays.areEqual(lastHmac, currentHmac)) {
             System.out.println("INTEGRITY CHECK OF PASSWORD FILE SUCCESS");
+                                    m.changeScene("loggedIn.fxml");
+
         } else {
             System.out.println("INTEGRITY CHECK OF PASSWORD FILE FAILED\n");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setContentText("Wrong credentials");
+                        alert.show();
         }
     }
+
+
 
     public static void main(String[] args) throws Exception {
 
@@ -363,4 +402,6 @@ public class Encryptor {
 
 
     }
+
+
 }

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.LoggingController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.Encryptor">
    <children>
 
       <AnchorPane prefHeight="400.0" prefWidth="600.0">
@@ -22,26 +22,18 @@
                   <Image url="@Cyber-Security-locked-blue-lock.png" />
                </image>
             </ImageView>
-            <Label layoutX="359.0" layoutY="104.0" prefHeight="29.0" prefWidth="108.0" text="Username" textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font name="Times New Roman" size="25.0" />
-               </font>
-            </Label>
+<!--            <Label layoutX="359.0" layoutY="104.0" prefHeight="29.0" prefWidth="108.0" text="Username" textAlignment="CENTER" textFill="WHITE">-->
+<!--               <font>-->
+<!--                  <Font name="Times New Roman" size="25.0" />-->
+<!--               </font>-->
+<!--            </Label>-->
             <Label layoutX="363.0" layoutY="176.0" prefHeight="36.0" prefWidth="99.0" text="Password" textFill="WHITE">
                <font>
                   <Font name="Times New Roman" size="25.0" />
                </font>
             </Label>
-            <TextField fx:id="tf_username" layoutX="333.0" layoutY="145.0" />
-            <Button fx:id="btn_login" layoutX="360.0" layoutY="260.0" mnemonicParsing="false" onAction="#loginPerson" prefHeight="26.0" prefWidth="99.0" text="Login">
-               <font>
-                  <Font name="Times New Roman" size="17.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="btn_login2" layoutX="360.0" layoutY="360.0" mnemonicParsing="false" onAction="#loginPerson2" prefHeight="26.0" prefWidth="99.0" text="Login with file">
+<!--            <TextField fx:id="tf_username" layoutX="333.0" layoutY="145.0" />-->
+            <Button fx:id="btn_login2" layoutX="360.0" layoutY="360.0" mnemonicParsing="false" onAction="#loginFromMasterPass" prefHeight="26.0" prefWidth="99.0" text="Login with file">
                <font>
                   <Font name="Times New Roman" size="17.0" />
                </font>
@@ -55,7 +47,7 @@
                   <Font name="Times New Roman" size="15.0" />
                </font>
             </Label>
-            <Button fx:id="btn_sign_up" alignment="TOP_CENTER" layoutX="429.0" layoutY="307.0" mnemonicParsing="false" onAction="#createAccount" prefHeight="26.0" prefWidth="76.0" style="-fx-background-color: transparent;" text="Sign Up" textFill="WHITE" underline="true">
+            <Button fx:id="btn_sign_up" alignment="TOP_CENTER" layoutX="429.0" layoutY="307.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" style="-fx-background-color: transparent;" text="Sign Up" textFill="WHITE" underline="true" onAction="#ChangeSceneToAccountCreation">
                <font>
                   <Font name="Times New Roman Bold" size="16.0" />
                </font>
@@ -63,7 +55,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <PasswordField fx:id="tf_password" layoutX="333.0" layoutY="212.0" />
+            <PasswordField fx:id="tf_password" layoutX="333.0" layoutY="212.0"/>
 <!--            <Button fx:id="btn_selector" layoutX="251.0" layoutY="260.0" mnemonicParsing="false" onAction="#createAccount" prefHeight="26.0" prefWidth="99.0" text="Open File">-->
 <!--               <font>-->
 <!--                  <Font name="Times New Roman" size="17.0" />-->
