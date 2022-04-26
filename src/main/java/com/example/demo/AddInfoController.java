@@ -1,23 +1,12 @@
 package com.example.demo;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.example.demo.Encryptor.createAccount;
 
@@ -39,12 +28,6 @@ public class AddInfoController implements Initializable {
     @FXML
     public TextField notesFx;
 
-
-    String query = null;
-    Connection connection = null;
-    ResultSet resultSet = null;
-    PreparedStatement preparedStatement;
-//    StoredInfo storedInfo = null;
     private boolean update;
     int userid;
 
@@ -57,9 +40,6 @@ public class AddInfoController implements Initializable {
     }
 
     public void save(javafx.scene.input.MouseEvent mouseEvent) throws Exception {
-
-        //DatabaseConnection dbCon = new DatabaseConnection();
-       // connection = dbCon.DatabaseConnection();
         String username = userNameFx.getText();
         String email = emailFx.getText();
         String website = websiteFx.getText();
@@ -76,7 +56,6 @@ public class AddInfoController implements Initializable {
         } else {
             //getQuery();
             createAccount(username, email, password);
-
         }
     }
 

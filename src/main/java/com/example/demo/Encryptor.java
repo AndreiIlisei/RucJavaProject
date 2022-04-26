@@ -1,12 +1,10 @@
 package com.example.demo;
 
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -19,12 +17,10 @@ import javax.crypto.SecretKey;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,10 +55,10 @@ public class Encryptor  {
 
 
     @FXML
-    public TextField userNameFx;
+    public static TextField userNameFx;
 
     @FXML
-    public TextField emailFx;
+    public static TextField emailFx;
 
     @FXML
     public TextField passwordFx;
@@ -236,6 +232,8 @@ public class Encryptor  {
         pass_file += pass_file_path;
         Path path = Paths.get(pass_file);
 
+        new TableViewModel(userNameFx.getText(),emailFx.getText(),"stef","stef","stef");
+
         byte[] data = Files.readAllBytes(path);
         byte[] encryptedData = Arrays.copyOfRange(data, 320, data.length);
         byte[] decrypt = decrypt(encryptedData, entranceKey);
@@ -332,6 +330,7 @@ public class Encryptor  {
     public void createMasterPassword(ActionEvent event) throws Exception {
         setup(create_pass.getText());
     }
+
     public static void setup(String master_passwd) throws Exception {
         Main m = new Main();
         String passwd_file_string = System.getProperty("user.dir");
@@ -451,16 +450,16 @@ public class Encryptor  {
             }
         }
     }
+
     public void postData() {
         new TableViewModel("stef","stef","stef","stef","stef");
 
         userNameColumn.setCellValueFactory(new PropertyValueFactory<>("userNameColumn"));
+        new TableViewModel("name", "try", "stef","stef","stef");
         mainTableView.setItems(tableView);
     }
     private ObservableList<TableViewModel> tableView = FXCollections.observableArrayList(
             new TableViewModel("stef","stef","stef","stef","stef")
-
-
     );
 
 
