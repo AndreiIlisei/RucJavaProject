@@ -1,20 +1,37 @@
 package com.example.demo;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class AddInfoController implements Initializable {
+
+
+    @FXML
+    private TableView<StoredInfo> tableView;
+
+    @FXML
+    private TableColumn<StoredInfo, String> userNameColumn;
+
+    @FXML
+    private TableColumn<StoredInfo, String> emailColumn;
+
+    @FXML
+    private TableColumn<StoredInfo, String> password;
+
+    @FXML
+    private TableColumn<StoredInfo, String> website;
+
+    @FXML
+    private TableColumn<StoredInfo, String> notes;
+
 
     //Text input
     @FXML
@@ -32,12 +49,6 @@ public class AddInfoController implements Initializable {
     @FXML
     public TextField notesFx;
 
-
-    String query = null;
-    Connection connection = null;
-    ResultSet resultSet = null;
-    PreparedStatement preparedStatement;
-//    StoredInfo storedInfo = null;
     private boolean update;
     int userid;
 
@@ -46,32 +57,50 @@ public class AddInfoController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        userNameColumn.setCellValueFactory(new PropertyValueFactory<StoredInfo, String>("username"));
+        emailColumn.setCellValueFactory(new PropertyValueFactory<StoredInfo, String>("email"));
+        password.setCellValueFactory(new PropertyValueFactory<StoredInfo, String>("password"));
+        website.setCellValueFactory(new PropertyValueFactory<StoredInfo, String>("website"));
+        notes.setCellValueFactory(new PropertyValueFactory<StoredInfo, String>("notes"));
     }
 
-    public void save(javafx.scene.input.MouseEvent mouseEvent) {
 
-        DatabaseConnection dbCon = new DatabaseConnection();
-        connection = dbCon.DatabaseConnection();
-        String username = userNameFx.getText();
-        String email = emailFx.getText();
-        String website = websiteFx.getText();
-        String password = passwordFx.getText();
-        String notes = notesFx.getText();
-
-
-        if (username.isEmpty() || email.isEmpty() || website.isEmpty() || password.isEmpty() || notes.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(null);
-            alert.setContentText("Please Fill All DATA");
-            alert.showAndWait();
-
-        } else {
-            getQuery();
-            insert();
-            clean();
-        }
+    @FXML
+    public void save(javafx.scene.input.MouseEvent mouseEvent) throws Exception {
+        StoredInfo info = new StoredInfo(userNameFx.getText(), emailFx.getText(), websiteFx.getText(), passwordFx.getText(), notesFx.getText());
+        ObservableList<StoredInfo> information = tableView.getItems();
+        information.add(info);
+        tableView.setItems(information);
     }
+
+//        String username = userNameFx.getText();
+//        String email = emailFx.getText();
+//        String website = websiteFx.getText();
+//        String password = passwordFx.getText();
+//        String notes = notesFx.getText();
+
+
+//        if (username.isEmpty() || email.isEmpty() || website.isEmpty() || password.isEmpty() || notes.isEmpty()) {
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setHeaderText(null);
+//            alert.setContentText("Please Fill All DATA");
+//            alert.showAndWait();
+//
+//        } else {
+
+
+            //getQuery();
+//            System.out.println("it has smth");
+//            new TableViewModel(username, email, password ,website,notes);
+//            createAccount(username, email, password);
+//            new TableViewModel(userNameFx.getText(),emailFx.getText(),"stef","stef","stef");
+//            userNameFx.setText("username");
+//        emailFx.setText("email");
+//        websiteFx.setText("website");
+//        passwordFx.setText("password");
+//        passwordFx.setText("notes");
+//        }
+//    }
 
     @FXML
     private void clean() {
@@ -82,39 +111,41 @@ public class AddInfoController implements Initializable {
         notesFx.setText(null);
     }
 
-    private void getQuery() {
-
-        if (update == false) {
-            query = "INSERT INTO public.\"StoredInfo\" (username, email, website, password, notes) VALUES (?,?,?,?,?)";
-
-        } else {
-            query = "UPDATE public.\"StoredInfo\" "
-                    + "SET username=?, email=?, website=?, password=?, notes=?"
-                    + "WHERE userid = '" + userid + "'";
-
-//                    + "username=?,"
-//                    + "email=?,"
-//                    + "website=?,"
-//                    + "password=?,"
-//                    + "notes=? WHERE userid = '"+userid+"'";
-        }
-
-    }
+//    private void getQuery() {
+//
+//        if (update == false) {
+//            query = "INSERT INTO public.\"StoredInfo\" (username, email, website, password, notes) VALUES (?,?,?,?,?)";
+//
+//        } else {
+//            query = "UPDATE public.\"StoredInfo\" "
+//                    + "SET username=?, email=?, website=?, password=?, notes=?"
+//                    + "WHERE userid = '" + userid + "'";
+//
+////                    + "username=?,"
+////                    + "email=?,"
+////                    + "website=?,"
+////                    + "password=?,"
+////                    + "notes=? WHERE userid = '"+userid+"'";
+//        }
+//
+//    }
 
     private void insert() {
-        try {
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, userNameFx.getText());
-            preparedStatement.setString(2, emailFx.getText());
-            preparedStatement.setString(3, websiteFx.getText());
-            preparedStatement.setString(4, passwordFx.getText());
-            preparedStatement.setString(5, notesFx.getText());
 
-            preparedStatement.execute();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(AddInfoController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//
+////            preparedStatement = connection.prepareStatement(query);
+////            preparedStatement.setString(1, userNameFx.getText());
+////            preparedStatement.setString(2, emailFx.getText());
+////            preparedStatement.setString(3, websiteFx.getText());
+////            preparedStatement.setString(4, passwordFx.getText());
+////            preparedStatement.setString(5, notesFx.getText());
+////
+////            preparedStatement.execute();
+//
+//        } catch (SQLException ex) {
+//            Logger.getLogger(AddInfoController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
     }
 
