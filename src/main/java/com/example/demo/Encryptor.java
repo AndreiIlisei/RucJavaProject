@@ -1,7 +1,10 @@
 package com.example.demo;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.TransformationList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -248,7 +252,7 @@ public class Encryptor {
                 output.close();
                 System.out.println("Registered");
             }
-            getPass(domain);
+            //getPass();
         } else {
             System.out.println("Already registered");
         }
@@ -285,7 +289,7 @@ public class Encryptor {
         return (Arrays.areEqual(contents, Arrays.concatenate(salt, hashed)));
     }
 
-    static void getPass(String domain) throws Exception {
+    static void getPass() throws Exception {
         String pass_file = System.getProperty("user.dir");
         pass_file += pass_file_path;
         Path path = Paths.get(pass_file);
@@ -298,10 +302,23 @@ public class Encryptor {
         System.out.println(datastring);
         String[] acc = datastring.split("!");
         //   String id = domain;
+        Customer customer = new Customer();
+        Controller controller = new Controller();
+        ArrayList<String> arrayList = new ArrayList<>();
+
         for (String accounts : acc) {
+
             //  if (accounts.contains(id)) {
             String[] accArrray = accounts.split(" ");
-            System.out.println(accArrray[0]);
+            arrayList.add(accArrray[0]);
+            arrayList.add(accArrray[1]);
+            arrayList.add(accArrray[2]);
+            customer.setName(accArrray[0]);
+            customer.setAge(accArrray[1]);
+            customer.setNumber(accArrray[2]);
+            //controller.load(customer.getName(), customer.getAge(), customer.getNumber());
+            controller.getList(arrayList);
+         //  System.out.println(accArrray[0] + " " + accArrray[1] + " " + accArrray[2]);
             //    } else {
             //     System.out.println("no account found");
             //   }
@@ -394,6 +411,7 @@ public class Encryptor {
     // Action buttons
     public void loginFromMasterPass(javafx.event.ActionEvent event) throws Exception {
         startup(tf_password.getText());
+
     }
 
     private static void startup(String master_passwd) throws Exception {
@@ -422,7 +440,7 @@ public class Encryptor {
         if (Arrays.areEqual(lastHmac, currentHmac)) {
             System.out.println("INTEGRITY CHECK OF PASSWORD FILE SUCCESS");
             m.changeScene("testSample.fxml");
-
+            getPass();
         } else {
             System.out.println("INTEGRITY CHECK OF PASSWORD FILE FAILED\n");
             Alert alert = new Alert(Alert.AlertType.ERROR);

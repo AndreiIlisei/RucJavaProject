@@ -12,6 +12,9 @@ public class Customer {
         this.number = number;
     }
 
+    public Customer() {
+    }
+
     public String getName() {
         return name;
     }

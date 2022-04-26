@@ -29,9 +29,7 @@
                 <Button mnemonicParsing="false" onAction="#submit" prefHeight="25.0" prefWidth="200.0" text="Submit" />
             </children>
         </VBox>
-        <Button layoutX="420.0" layoutY="349.0" mnemonicParsing="false" onAction="#removeCustomer" text="Remove" />
-
-        <Button layoutX="420.0" layoutY="349.0" mnemonicParsing="false" onAction="#loadData" text="Remove" />
+        <Button layoutX="400.0" layoutY="349.0" mnemonicParsing="false" onAction="#removeCustomer" text="Remove" />
     </children>
 </AnchorPane>
 
