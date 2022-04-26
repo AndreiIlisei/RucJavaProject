@@ -32,11 +32,12 @@ import static com.example.demo.Cryptography.decrypt;
 import static com.example.demo.Cryptography.encrypt;
 import static com.example.demo.CryptographyHelper.*;
 
-public class Encryptor implements Initializable {
+public class Encryptor  {
     @FXML
     private PasswordField tf_password;
     @FXML
     private PasswordField create_pass;
+
 
     @FXML
     private TableView<TableViewModel> mainTableView;
@@ -55,6 +56,7 @@ public class Encryptor implements Initializable {
 
     @FXML
     private TableColumn<TableViewModel, String> notes;
+
 
     @FXML
     public TextField userNameFx;
@@ -225,6 +227,7 @@ public class Encryptor implements Initializable {
         } else {
             //getQuery();
             createAccount(userNameFx.getText(), emailFx.getText(), passwordFx.getText());
+            postData();
         }
     }
 
@@ -448,10 +451,7 @@ public class Encryptor implements Initializable {
             }
         }
     }
-
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void postData() {
         new TableViewModel("stef","stef","stef","stef","stef");
 
         userNameColumn.setCellValueFactory(new PropertyValueFactory<>("userNameColumn"));
@@ -462,4 +462,7 @@ public class Encryptor implements Initializable {
 
 
     );
+
+
+
 }
