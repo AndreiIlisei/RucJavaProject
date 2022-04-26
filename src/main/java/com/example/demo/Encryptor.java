@@ -28,7 +28,7 @@ import static com.example.demo.Cryptography.decrypt;
 import static com.example.demo.Cryptography.encrypt;
 import static com.example.demo.CryptographyHelper.*;
 
-public class Encryptor  {
+public class Encryptor {
     @FXML
     private PasswordField tf_password;
     @FXML
@@ -39,26 +39,26 @@ public class Encryptor  {
     private TableView<TableViewModel> mainTableView;
 
     @FXML
-    private TableColumn<TableViewModel, String> userNameColumn;
+    private TableColumn<StoredInfo, String> userNameColumn;
 
     @FXML
-    private TableColumn<TableViewModel, String> emailColumn;
+    private TableColumn<StoredInfo, String> emailColumn;
 
     @FXML
-    private TableColumn<TableViewModel, String> password;
+    private TableColumn<StoredInfo, String> password;
 
     @FXML
-    private TableColumn<TableViewModel, String> website;
+    private TableColumn<StoredInfo, String> website;
 
     @FXML
-    private TableColumn<TableViewModel, String> notes;
+    private TableColumn<StoredInfo, String> notes;
 
 
     @FXML
-    public static TextField userNameFx;
+    public TextField userNameFx;
 
     @FXML
-    public static TextField emailFx;
+    public TextField emailFx;
 
     @FXML
     public TextField passwordFx;
@@ -79,8 +79,6 @@ public class Encryptor  {
     static String master_file_writer = "masterfile.aes";
 
 
-
-
     // Change of scenes
     public void goBackToLogin(ActionEvent actionEvent) throws IOException {
         Main m = new Main();
@@ -93,9 +91,8 @@ public class Encryptor  {
     }
 
 
-
     // Functions
-    private static void deleteAccount(String domain, String username) throws Exception{
+    private static void deleteAccount(String domain, String username) throws Exception {
         //get data from passwd_file
         String pass_file = System.getProperty("user.dir");
         pass_file += pass_file_path;
@@ -149,7 +146,6 @@ public class Encryptor  {
     }
 
 
-
     private static void changeAccount(String domain, String username, String password) throws Exception {
 
         String pass_file = System.getProperty("user.dir");
@@ -198,6 +194,7 @@ public class Encryptor  {
             System.out.println("USER ACCOUNT DOES NOT EXIST!\n");
         }
     }
+
     public void getAddInformation(javafx.scene.input.MouseEvent mouseEvent) {
         try {
             Parent parent = FXMLLoader.load(getClass().getResource("addInformation.fxml"));
@@ -210,11 +207,12 @@ public class Encryptor  {
             Logger.getLogger(Encryptor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     @FXML
-    public void save(javafx.scene.input.MouseEvent mouseEvent) throws Exception{
+    public void save(javafx.scene.input.MouseEvent mouseEvent) throws Exception {
         Main m = new Main();
 
-        if (userNameFx.getText().isEmpty() || emailFx.getText().isEmpty() || website.getText().isEmpty() || password.getText().isEmpty() || notes.getText().isEmpty()) {
+        if (userNameFx.getText().isEmpty() || emailFx.getText().isEmpty() || websiteFx.getText().isEmpty() || passwordFx.getText().isEmpty() || notesFx.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setContentText("Please Fill All DATA");
@@ -222,7 +220,7 @@ public class Encryptor  {
 
         } else {
             //getQuery();
-            createAccount(userNameFx.getText(), emailFx.getText(), passwordFx.getText());
+//            createAccount(userNameFx.getText(), emailFx.getText(), passwordFx.getText());
             postData();
         }
     }
@@ -231,8 +229,6 @@ public class Encryptor  {
         String pass_file = System.getProperty("user.dir");
         pass_file += pass_file_path;
         Path path = Paths.get(pass_file);
-
-        new TableViewModel(userNameFx.getText(),emailFx.getText(),"stef","stef","stef");
 
         byte[] data = Files.readAllBytes(path);
         byte[] encryptedData = Arrays.copyOfRange(data, 320, data.length);
@@ -271,7 +267,7 @@ public class Encryptor  {
         return null;
     }
 
-    private static boolean passwordCheck(String password) throws Exception{
+    private static boolean passwordCheck(String password) throws Exception {
         //get contents
         String master_passwd_path = System.getProperty("user.dir");
         master_passwd_path += master_file_path;
@@ -289,7 +285,7 @@ public class Encryptor  {
         return (Arrays.areEqual(contents, Arrays.concatenate(salt, hashed)));
     }
 
-    private static void getPass(String domain) throws Exception {
+    static void getPass(String domain) throws Exception {
         String pass_file = System.getProperty("user.dir");
         pass_file += pass_file_path;
         Path path = Paths.get(pass_file);
@@ -301,14 +297,14 @@ public class Encryptor  {
         String datastring = new String(decrypted, StandardCharsets.UTF_8);
         System.out.println(datastring);
         String[] acc = datastring.split("!");
-     //   String id = domain;
+        //   String id = domain;
         for (String accounts : acc) {
-          //  if (accounts.contains(id)) {
-                String[] accArrray = accounts.split(" ");
-                System.out.println(accArrray[0]);
-        //    } else {
-           //     System.out.println("no account found");
-         //   }
+            //  if (accounts.contains(id)) {
+            String[] accArrray = accounts.split(" ");
+            System.out.println(accArrray[0]);
+            //    } else {
+            //     System.out.println("no account found");
+            //   }
         }
     }
 
@@ -390,15 +386,16 @@ public class Encryptor  {
             output.write(salt_hmac_and_encrypted);
             output.close();
             System.out.println("This worked");
-            m.changeScene("loggedIn.fxml");
+            m.changeScene("testSample.fxml");
 
         }
     }
 
     // Action buttons
-    public void loginFromMasterPass(javafx.event.ActionEvent event) throws Exception{
+    public void loginFromMasterPass(javafx.event.ActionEvent event) throws Exception {
         startup(tf_password.getText());
     }
+
     private static void startup(String master_passwd) throws Exception {
         Main m = new Main();
 
@@ -424,13 +421,13 @@ public class Encryptor  {
 
         if (Arrays.areEqual(lastHmac, currentHmac)) {
             System.out.println("INTEGRITY CHECK OF PASSWORD FILE SUCCESS");
-                                    m.changeScene("loggedIn.fxml");
+            m.changeScene("testSample.fxml");
 
         } else {
             System.out.println("INTEGRITY CHECK OF PASSWORD FILE FAILED\n");
             Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setContentText("Wrong credentials");
-                        alert.show();
+            alert.setContentText("Wrong credentials");
+            alert.show();
         }
     }
 
@@ -451,17 +448,16 @@ public class Encryptor  {
         }
     }
 
+    @FXML
     public void postData() {
-        new TableViewModel("stef","stef","stef","stef","stef");
+        userNameColumn.setCellValueFactory(new PropertyValueFactory<StoredInfo, String>("username"));
+        emailColumn.setCellValueFactory(new PropertyValueFactory<StoredInfo, String>("email"));
+        password.setCellValueFactory(new PropertyValueFactory<StoredInfo, String>("password"));
+        website.setCellValueFactory(new PropertyValueFactory<StoredInfo, String>("website"));
+        notes.setCellValueFactory(new PropertyValueFactory<StoredInfo, String>("notes"));
 
-        userNameColumn.setCellValueFactory(new PropertyValueFactory<>("userNameColumn"));
-        new TableViewModel("name", "try", "stef","stef","stef");
-        mainTableView.setItems(tableView);
+        ObservableList<TableViewModel> tableView = FXCollections.observableArrayList(
+                new TableViewModel(userNameFx.getText(), emailFx.getText(), passwordFx.getText(), websiteFx.getText(), notesFx.getText())
+        );
     }
-    private ObservableList<TableViewModel> tableView = FXCollections.observableArrayList(
-            new TableViewModel("stef","stef","stef","stef","stef")
-    );
-
-
-
 }

@@ -40,7 +40,7 @@
         <TextField fx:id="userNameFx" layoutX="168.0" layoutY="93.0" pickOnBounds="false" />
         <TextField fx:id="emailFx" layoutX="168.0" layoutY="133.0" pickOnBounds="false" />
         <Button fx:id="saveButton" layoutX="337.0" layoutY="342.0" mnemonicParsing="false" text="Save" onMouseClicked="#save"/>
-        <Button fx:id="cancelButton" layoutX="23.0" layoutY="342.0" mnemonicParsing="false" text="Clean" onMouseClicked="#clean" />
+<!--        <Button fx:id="cancelButton" layoutX="23.0" layoutY="342.0" mnemonicParsing="false" text="Clean" onMouseClicked="#clean" />-->
         <PasswordField layoutX="168.0" layoutY="178.0" />
         <TextField fx:id="passwordFx" layoutX="168.0" layoutY="178.0" pickOnBounds="false" />
         <CheckBox layoutX="290.0" layoutY="182.0" mnemonicParsing="false" />
