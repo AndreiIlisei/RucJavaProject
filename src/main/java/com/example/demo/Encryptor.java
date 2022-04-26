@@ -1,12 +1,16 @@
 package com.example.demo;
 
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.bouncycastle.util.Arrays;
@@ -15,11 +19,12 @@ import javax.crypto.SecretKey;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.concurrent.TimeUnit;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,11 +32,44 @@ import static com.example.demo.Cryptography.decrypt;
 import static com.example.demo.Cryptography.encrypt;
 import static com.example.demo.CryptographyHelper.*;
 
-public class Encryptor {
+public class Encryptor implements Initializable {
     @FXML
     private PasswordField tf_password;
     @FXML
     private PasswordField create_pass;
+
+    @FXML
+    private TableView<TableViewModel> mainTableView;
+
+    @FXML
+    private TableColumn<TableViewModel, String> userNameColumn;
+
+    @FXML
+    private TableColumn<TableViewModel, String> emailColumn;
+
+    @FXML
+    private TableColumn<TableViewModel, String> password;
+
+    @FXML
+    private TableColumn<TableViewModel, String> website;
+
+    @FXML
+    private TableColumn<TableViewModel, String> notes;
+
+    @FXML
+    public TextField userNameFx;
+
+    @FXML
+    public TextField emailFx;
+
+    @FXML
+    public TextField passwordFx;
+
+    @FXML
+    public TextField websiteFx;
+
+    @FXML
+    public TextField notesFx;
 
     private static SecretKey macKey;
     private static SecretKey entranceKey;
@@ -41,6 +79,9 @@ public class Encryptor {
     static String master_file_path = "/masterfile.aes";
     static String pass_file_writer = "passwordfile.aes";
     static String master_file_writer = "masterfile.aes";
+
+
+
 
     // Change of scenes
     public void goBackToLogin(ActionEvent actionEvent) throws IOException {
@@ -53,27 +94,7 @@ public class Encryptor {
         m.changeScene("sign-up.fxml");
     }
 
-    public void getAddInformation(javafx.scene.input.MouseEvent mouseEvent) {
-        try {
-            Parent parent = FXMLLoader.load(getClass().getResource("addInformation.fxml"));
-            Scene scene = new Scene(parent);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.initStyle(StageStyle.UTILITY);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(Encryptor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
-    // Action buttons
-    public void loginFromMasterPass(javafx.event.ActionEvent event) throws Exception{
-        startup(tf_password.getText());
-    }
-
-    public void createMasterPassword(ActionEvent event) throws Exception {
-        setup(create_pass.getText());
-    }
 
     // Functions
     private static void deleteAccount(String domain, String username) throws Exception{
@@ -129,6 +150,8 @@ public class Encryptor {
         }
     }
 
+
+
     private static void changeAccount(String domain, String username, String password) throws Exception {
 
         String pass_file = System.getProperty("user.dir");
@@ -177,6 +200,33 @@ public class Encryptor {
             System.out.println("USER ACCOUNT DOES NOT EXIST!\n");
         }
     }
+    public void getAddInformation(javafx.scene.input.MouseEvent mouseEvent) {
+        try {
+            Parent parent = FXMLLoader.load(getClass().getResource("addInformation.fxml"));
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(Encryptor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    @FXML
+    public void save(javafx.scene.input.MouseEvent mouseEvent) throws Exception{
+        Main m = new Main();
+
+        if (userNameFx.getText().isEmpty() || emailFx.getText().isEmpty() || website.getText().isEmpty() || password.getText().isEmpty() || notes.getText().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setContentText("Please Fill All DATA");
+            alert.showAndWait();
+
+        } else {
+            //getQuery();
+            createAccount(userNameFx.getText(), emailFx.getText(), passwordFx.getText());
+        }
+    }
 
     public static void createAccount(String domain, String username, String password) throws Exception {
         String pass_file = System.getProperty("user.dir");
@@ -201,6 +251,7 @@ public class Encryptor {
                 output.close();
                 System.out.println("Registered");
             }
+            getPass(domain);
         } else {
             System.out.println("Already registered");
         }
@@ -249,14 +300,14 @@ public class Encryptor {
         String datastring = new String(decrypted, StandardCharsets.UTF_8);
         System.out.println(datastring);
         String[] acc = datastring.split("!");
-        String id = domain;
+     //   String id = domain;
         for (String accounts : acc) {
-            if (accounts.contains(id)) {
+          //  if (accounts.contains(id)) {
                 String[] accArrray = accounts.split(" ");
-                System.out.println("Username: " + accArrray[0] + " " + accArrray[1] + " " + accArrray[2]);
-            } else {
-                System.out.println("no account found");
-            }
+                System.out.println(accArrray[0]);
+        //    } else {
+           //     System.out.println("no account found");
+         //   }
         }
     }
 
@@ -275,7 +326,9 @@ public class Encryptor {
         return (passwd_file.exists() && master_passwd.exists());
     }
 
-
+    public void createMasterPassword(ActionEvent event) throws Exception {
+        setup(create_pass.getText());
+    }
     public static void setup(String master_passwd) throws Exception {
         Main m = new Main();
         String passwd_file_string = System.getProperty("user.dir");
@@ -301,7 +354,7 @@ public class Encryptor {
         master_passwd_file.createNewFile();
 
         //get master password
-//        master_passwd = "DetHerErMasterPassword";
+//         master_passwd = "DetHerErMasterPassword";
         byte[] password = master_passwd.getBytes();
 
         //get salts and combine with master password
@@ -340,7 +393,10 @@ public class Encryptor {
         }
     }
 
-
+    // Action buttons
+    public void loginFromMasterPass(javafx.event.ActionEvent event) throws Exception{
+        startup(tf_password.getText());
+    }
     private static void startup(String master_passwd) throws Exception {
         Main m = new Main();
 
@@ -377,7 +433,6 @@ public class Encryptor {
     }
 
 
-
     public static void main(String[] args) throws Exception {
 
         if (!fileCheck()) {
@@ -392,34 +447,19 @@ public class Encryptor {
                 createAccount("stef", "Steffen", "DetHerErMasterPassword");
             }
         }
-        getPass("stef");
-
-        changeAccount("stef", "Steffen", "nytpassword");
-
-        getPass("stef");
-
-        deleteAccount("stef", "Steffen");
-
-        startup("randomMasterPassword");
-
-        createAccount("stef", "nyYsers", "asfasf");
-        getPass("stef");
-
-        createAccount("stefdondon", "Steffen", "randomMasterPassword");
-        getPass("stefdondon");
-
-        createAccount("stefdon", "nyteUSer", "asdasd");
-        getPass("stefdon");
-
-        TimeUnit.SECONDS.sleep(3);
-        getPass("stef");
-
-//        passwordCheck("randomMasterPassword");
-//
-//        getPass("stef");
-
-
     }
 
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        new TableViewModel("stef","stef","stef","stef","stef");
+
+        userNameColumn.setCellValueFactory(new PropertyValueFactory<>("userNameColumn"));
+        mainTableView.setItems(tableView);
+    }
+    private ObservableList<TableViewModel> tableView = FXCollections.observableArrayList(
+            new TableViewModel("stef","stef","stef","stef","stef")
+
+
+    );
 }

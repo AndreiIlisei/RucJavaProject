@@ -14,6 +14,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.example.demo.Encryptor.createAccount;
+
 public class AddInfoController implements Initializable {
 
     //Text input
@@ -49,10 +51,10 @@ public class AddInfoController implements Initializable {
         // TODO
     }
 
-    public void save(javafx.scene.input.MouseEvent mouseEvent) {
+    public void save(javafx.scene.input.MouseEvent mouseEvent) throws Exception {
 
-        DatabaseConnection dbCon = new DatabaseConnection();
-        connection = dbCon.DatabaseConnection();
+        //DatabaseConnection dbCon = new DatabaseConnection();
+       // connection = dbCon.DatabaseConnection();
         String username = userNameFx.getText();
         String email = emailFx.getText();
         String website = websiteFx.getText();
@@ -67,8 +69,8 @@ public class AddInfoController implements Initializable {
             alert.showAndWait();
 
         } else {
-            getQuery();
-            insert();
+            //getQuery();
+            createAccount(username, email, password);
             clean();
         }
     }
@@ -82,39 +84,41 @@ public class AddInfoController implements Initializable {
         notesFx.setText(null);
     }
 
-    private void getQuery() {
-
-        if (update == false) {
-            query = "INSERT INTO public.\"StoredInfo\" (username, email, website, password, notes) VALUES (?,?,?,?,?)";
-
-        } else {
-            query = "UPDATE public.\"StoredInfo\" "
-                    + "SET username=?, email=?, website=?, password=?, notes=?"
-                    + "WHERE userid = '" + userid + "'";
-
-//                    + "username=?,"
-//                    + "email=?,"
-//                    + "website=?,"
-//                    + "password=?,"
-//                    + "notes=? WHERE userid = '"+userid+"'";
-        }
-
-    }
+//    private void getQuery() {
+//
+//        if (update == false) {
+//            query = "INSERT INTO public.\"StoredInfo\" (username, email, website, password, notes) VALUES (?,?,?,?,?)";
+//
+//        } else {
+//            query = "UPDATE public.\"StoredInfo\" "
+//                    + "SET username=?, email=?, website=?, password=?, notes=?"
+//                    + "WHERE userid = '" + userid + "'";
+//
+////                    + "username=?,"
+////                    + "email=?,"
+////                    + "website=?,"
+////                    + "password=?,"
+////                    + "notes=? WHERE userid = '"+userid+"'";
+//        }
+//
+//    }
 
     private void insert() {
-        try {
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, userNameFx.getText());
-            preparedStatement.setString(2, emailFx.getText());
-            preparedStatement.setString(3, websiteFx.getText());
-            preparedStatement.setString(4, passwordFx.getText());
-            preparedStatement.setString(5, notesFx.getText());
 
-            preparedStatement.execute();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(AddInfoController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//
+////            preparedStatement = connection.prepareStatement(query);
+////            preparedStatement.setString(1, userNameFx.getText());
+////            preparedStatement.setString(2, emailFx.getText());
+////            preparedStatement.setString(3, websiteFx.getText());
+////            preparedStatement.setString(4, passwordFx.getText());
+////            preparedStatement.setString(5, notesFx.getText());
+////
+////            preparedStatement.execute();
+//
+//        } catch (SQLException ex) {
+//            Logger.getLogger(AddInfoController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
     }
 
