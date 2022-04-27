@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="396.0" prefWidth="695.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.LoggedInController">
+    <children>
+        <TableView fx:id="tableView" layoutX="290.0" layoutY="74.0" prefHeight="255.0" prefWidth="375.0">
+            <columns>
+                <TableColumn fx:id="domainColumn" prefWidth="124.0" text="Domain" />
+                <TableColumn fx:id="userNameColumn" prefWidth="132.0" text="User Name" />
+                <TableColumn fx:id="passwordColumn" minWidth="0.0" prefWidth="118.0" text="Password" />
+            </columns>
+        </TableView>
+
+        <VBox layoutX="51.0" layoutY="102.0" prefHeight="200.0" prefWidth="200.0" spacing="5.0">
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Domain" />
+                <TextField fx:id="userNameInput" />
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="User Name" />
+                <TextField fx:id="passwordInput" />
+                <Text layoutX="10.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
+                <TextField fx:id="domainInput" />
+                <Button mnemonicParsing="false" onAction="#submit" prefHeight="25.0" prefWidth="200.0" text="Submit" />
+
+            </children>
+        </VBox>
+        <Button layoutX="427.0" layoutY="349.0" mnemonicParsing="false" onAction="#refreshTable" prefHeight="25.0" prefWidth="101.0" text="Refresh Table" />
+        <Button layoutX="290.0" layoutY="349.0" mnemonicParsing="false" onAction="#removeCustomer" prefHeight="25.0" prefWidth="101.0" text="Remove Data" />
+        <Button layoutX="564.0" layoutY="349.0" mnemonicParsing="false" onAction="#logOut" prefHeight="25.0" prefWidth="101.0" text="Log Out" />
+    </children>
+</AnchorPane>

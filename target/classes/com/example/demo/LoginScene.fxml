@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="698.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.MainController">
+   <children>
+
+      <AnchorPane prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <ImageView fitHeight="401.0" fitWidth="698.0" opacity="0.89" pickOnBounds="true">
+               <image>
+                  <Image url="@Cyber-Security-locked-blue-lock.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="396.0" layoutY="135.0" prefHeight="36.0" prefWidth="186.0" text="Master Password" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman" size="25.0" />
+               </font>
+            </Label>
+            <Button fx:id="btn_login2" layoutX="417.0" layoutY="210.0" mnemonicParsing="false" onAction="#loginWithMasterPass" prefHeight="28.0" prefWidth="132.0" text="Access Account">
+               <font>
+                  <Font name="Times New Roman" size="15.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+
+            <Label layoutX="417.0" layoutY="250.0" prefHeight="29.0" prefWidth="99.0" text="Not a user?" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman" size="15.0" />
+               </font>
+            </Label>
+            <Button fx:id="btn_sign_up" alignment="TOP_CENTER" layoutX="477.0" layoutY="250.0" mnemonicParsing="false" onAction="#ChangeSceneToAccountCreation" prefHeight="29.0" prefWidth="78.0" style="-fx-background-color: transparent;" text="Sign Up" textFill="WHITE" underline="true">
+               <font>
+                  <Font name="Times New Roman Bold" size="16.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <StackPane layoutX="396.0" layoutY="171.0" prefHeight="25.0" prefWidth="173.0">
+               <PasswordField fx:id="hiddenPasswordTextField" prefHeight="25.0" prefWidth="252.0" promptText="Enter Password" />
+               <TextField fx:id="passwordTextField" promptText="Enter Password" visible="false" />
+               <CheckBox fx:id="showPassword" mnemonicParsing="false" onAction="#changeVisibility" StackPane.alignment="CENTER_RIGHT">
+                  <StackPane.margin>
+                     <Insets right="5.0" />
+                  </StackPane.margin>
+               </CheckBox>
+            </StackPane>
+         </children>
+      </AnchorPane>
+   </children>
+</HBox>

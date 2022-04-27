@@ -10,8 +10,4 @@ module com.example.demo {
 
     opens com.example.demo to javafx.fxml;
     exports com.example.demo;
-    exports com.encryption.KeyStores;
-    opens com.encryption.KeyStores to javafx.fxml;
-    exports com.encryption.KeyStores.NoUse;
-    opens com.encryption.KeyStores.NoUse to javafx.fxml;
 }
