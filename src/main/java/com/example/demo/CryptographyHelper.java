@@ -34,9 +34,7 @@ public class CryptographyHelper {
     public static byte[] hmac(byte[] input, SecretKey key) throws Exception {
 
         Security.addProvider(new BouncyCastleProvider());
-
         Mac mac = Mac.getInstance("HmacSHA512", "BC");
-
         mac.init(key);
 
         return mac.doFinal(input);
@@ -47,9 +45,9 @@ public class CryptographyHelper {
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256", "BC");
 
         //generate key
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-        SecretKey tmpKey = factory.generateSecret(spec);
-        SecretKey key = new SecretKeySpec(tmpKey.getEncoded(), "AES");
-        return key;
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 1000000, 256);
+        SecretKey temporaryKey = factory.generateSecret(spec);
+        SecretKey generatedKey = new SecretKeySpec(temporaryKey.getEncoded(), "AES");
+        return generatedKey;
     }
 }

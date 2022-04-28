@@ -7,7 +7,6 @@ module com.example.demo {
     requires org.apache.commons.io;
     requires org.apache.commons.lang3;
 
-
     opens com.example.demo to javafx.fxml;
     exports com.example.demo;
 }
