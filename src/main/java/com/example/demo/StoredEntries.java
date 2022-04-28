@@ -8,7 +8,7 @@ public class StoredEntries implements Serializable {
     private String userName;
     private String password;
 
-    public StoredEntries(String domain, String userName,  String password) {
+    public StoredEntries(String domain, String userName, String password) {
         this.domain = domain;
         this.userName = userName;
         this.password = password;

@@ -22,7 +22,7 @@ public class CryptographyHelper {
         return mda.digest(message);
     }
 
-    public static byte[] randomNumberGenerator(int size) throws NoSuchAlgorithmException, NoSuchProviderException {
+    public static byte[] randomNumberGenerator(int size) {
         Security.addProvider(new BouncyCastleProvider());
 
         SecureRandom rand = new SecureRandom();
@@ -40,7 +40,7 @@ public class CryptographyHelper {
         return mac.doFinal(input);
     }
 
-    public static SecretKey generateKey(String password, byte[] salt) throws FileNotFoundException, IOException, NoSuchProviderException, InvalidKeySpecException, NoSuchAlgorithmException {
+    public static SecretKey generateKey(String password, byte[] salt) throws NoSuchProviderException, InvalidKeySpecException, NoSuchAlgorithmException {
         Security.addProvider(new BouncyCastleProvider());
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256", "BC");
 

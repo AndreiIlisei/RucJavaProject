@@ -318,26 +318,6 @@ public class MainController {
         }
     }
 
-
-    //
-    private static boolean passwordCheck(String password) throws Exception {
-        //get contents
-        String master_passwd_path = System.getProperty("user.dir");
-        master_passwd_path += master_file_path;
-        Path path = Paths.get(master_passwd_path);
-        byte[] contents = Files.readAllBytes(path);
-
-        //get salt and password as bytes for comparison
-        byte[] salt = Arrays.copyOf(contents, 256);
-        byte[] password_bytes = password.getBytes();
-
-        //concatenate the salt and the password then hash it
-        byte[] salted_password = Arrays.concatenate(salt, password_bytes);
-        byte[] hashed = hash(salted_password);
-
-        return (Arrays.areEqual(contents, Arrays.concatenate(salt, hashed)));
-    }
-
     //This method shall be used in the future to check if the files are presents so we can direct
     //users to create a new account or keep trying to login an already exciting one.
     private static boolean fileCheck() {
